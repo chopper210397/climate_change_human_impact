@@ -1,0 +1,60 @@
+---
+title: "climate_change_impact_human"
+author: "Luis Barrios"
+date: "10/2/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(tidyr)
+co2<-read.csv("co2emissions.csv",sep=",",skip = 4)
+# selected country
+aruba<-co2 %>% filter(Country.Code=="PER")
+# creating a tidy data
+indicadoresaruba<-aruba %>% select(!c("Country.Code","Country.Name","Indicator.Code"))%>%
+  pivot_longer(!Indicator.Name,names_to = "fecha",values_to = "valor")
+# formatting dates
+indicadoresaruba$fecha<-substr(indicadoresaruba$fecha,2,5)
+indicadoresaruba$fecha<-ymd(indicadoresaruba$fecha, truncated = 2L)
+
+
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+indicadoresaruba %>% filter(Indicator.Name=="Population, total") %>%
+  ggplot(aes(x=fecha,y=valor/1000))+geom_line()+labs(x="",y="Población en miles",title = "Crecimiento de la población en miles")+theme_light()
+```
+
+
+```{r allvariables, echo=FALSE, message=FALSE, warning=FALSE}
+indicadoresaruba %>%
+  filter(Indicator.Name %in% c("Population, total",
+                               "Nitrous oxide emissions (thousand metric tons of CO2 equivalent)",
+                               "CO2 emissions from liquid fuel consumption (kt)",
+                               "Forest area (sq. km)",
+                               "Agricultural land (sq. km)")) %>%
+  ggplot(aes(x=fecha,y=valor/1000,color=Indicator.Name))+geom_line()+labs(x="",y="Población en miles",title = "gráfico de variables seleccionadas")+theme_light()
+```
+
+```{r co2, echo=FALSE, message=FALSE, warning=FALSE}
+indicadoresaruba %>%
+  filter(Indicator.Name %in% c(
+                               
+                               "CO2 emissions from liquid fuel consumption (kt)")) %>%
+  ggplot(aes(x=fecha,y=valor/1000,color=Indicator.Name))+geom_line()+labs(x="",y="miles")+theme_light()
+```
+
+```{r different, echo=FALSE, message=FALSE, warning=FALSE}
+indicadoresaruba %>%
+  filter(Indicator.Name %in% c(
+    "Nitrous oxide emissions (thousand metric tons of CO2 equivalent)",
+    "Forest area (sq. km)",
+    "Agricultural land (sq. km)")) %>%
+  ggplot(aes(x=fecha,y=valor,color=Indicator.Name))+geom_line()+labs(x="",y="")+theme_light()
+```
+

@@ -1,0 +1,9 @@
+"0","indicadoresaruba %>%"
+"0","  filter(Indicator.Name %in% c("
+"0","    ""Nitrous oxide emissions (thousand metric tons of CO2 equivalent)"","
+"0","    ""Forest area (sq. km)"","
+"0","    ""Agricultural land (sq. km)"")) %>%"
+"0","  ggplot(aes(x=fecha,y=valor,color=Indicator.Name))+geom_line()+labs(x="""",y="""")+theme_light()"
+"2","Warning:"
+"2"," Removed 48 row(s) containing missing values (geom_path).
+"
